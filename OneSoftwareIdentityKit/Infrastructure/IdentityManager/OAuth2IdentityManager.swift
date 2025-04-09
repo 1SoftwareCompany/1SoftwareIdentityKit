@@ -68,7 +68,7 @@ open class OAuth2IdentityManager: IdentityManager {
     
     //MARK: - State
     
-    private var accessTokenResponse: AccessTokenResponse? {
+    public private(set) var accessTokenResponse: AccessTokenResponse? {
         
         didSet {
             
