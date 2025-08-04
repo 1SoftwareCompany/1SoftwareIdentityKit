@@ -238,7 +238,7 @@ extension IdentityManager {
                                     using: networkClient,
                                     retryAttempts: retryAttempts - 1,
                                     validator: validator,
-                                    forceAuthenticate: true,
+                                    forceAuthenticate: forceAuthenticate,
                                     completion: completion
                                 )
                             } else {
