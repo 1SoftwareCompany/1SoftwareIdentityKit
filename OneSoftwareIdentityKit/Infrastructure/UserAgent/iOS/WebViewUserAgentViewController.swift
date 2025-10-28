@@ -83,7 +83,7 @@ open class WebViewUserAgentViewController: UIViewController, WKNavigationDelegat
     
     private var request: URLRequest?
     private var redirectURI: URL?
-    private var redirectionHandler:  ((URLRequest) throws -> Bool)?
+    private var redirectionHandler: ((URLRequest) throws -> Bool)?
     
     deinit {
         
@@ -187,7 +187,7 @@ open class WebViewUserAgentViewController: UIViewController, WKNavigationDelegat
     
     //MARK: - UserAgent
     
-    open func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping (URLRequest) throws -> Bool) {
+    nonisolated open func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) {
         
         DispatchQueue.main.async {
             

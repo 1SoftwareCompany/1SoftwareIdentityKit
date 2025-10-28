@@ -9,9 +9,9 @@
 import Foundation
 
 ///A default, closure based implementation of NetworkClient
-public struct AnyNetworkClient: NetworkClient {
+public struct AnyNetworkClient: NetworkClient, @unchecked Sendable {
     
-    public let handler: (_ request: URLRequest, _ completion: @escaping  @Sendable @MainActor (NetworkResponse) -> Void) -> Void
+    public let handler: (_ request: URLRequest, _ completion: @escaping @Sendable (NetworkResponse) -> Void) -> Void
     
     public init(handler: @escaping (_ request: URLRequest, _ completion: @escaping @Sendable (NetworkResponse) -> Void) -> Void) {
         
@@ -23,7 +23,7 @@ public struct AnyNetworkClient: NetworkClient {
         self.handler = userAgent.perform(_:completion:)
     }
     
-    public func perform(_ request: URLRequest, completion: @escaping @Sendable @MainActor (NetworkResponse) -> Void) {
+    public func perform(_ request: URLRequest, completion: @escaping @Sendable (NetworkResponse) -> Void) {
         
         self.handler(request, completion)
     }

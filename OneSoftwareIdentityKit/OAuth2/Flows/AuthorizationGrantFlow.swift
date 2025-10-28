@@ -9,15 +9,14 @@
 import Foundation
 
 //A type that performs an authorization grant flow in order to authenticate a client.
-@MainActor
-public protocol AuthorizationGrantFlow {
+public protocol AuthorizationGrantFlow: Sendable {
         
     /**
      Executes the flow that authenticates the user and upon success returns an access token that can be used to authorize client's requests
      
      - parameter handler: The callback, executed when the authentication is complete. The callback takes 2 arguments - a Token and an Error
      */
-    func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void)
+    func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void)
 }
 
 extension AuthorizationGrantFlow {

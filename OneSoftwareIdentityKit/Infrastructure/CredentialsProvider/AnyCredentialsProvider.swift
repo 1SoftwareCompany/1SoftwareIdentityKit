@@ -9,18 +9,18 @@
 import Foundation
 
 ///A default, closure based implementation of CredentialsProvider
-public struct AnyCredentialsProvider: CredentialsProvider {
+public struct AnyCredentialsProvider: CredentialsProvider, @unchecked Sendable {
     
-    private let credentialsHandler: (_ handler: @escaping @MainActor (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) -> Void
+    private let credentialsHandler: (_ handler: @escaping @Sendable (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) -> Void
     private let didFinishAuthenticatingHandler: (() -> Void)?
     private let didFailAuthenticatingHandler: ((Error) -> Void)?
     
-    public init(credentialsHandler: @escaping (_ handler: @escaping (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) -> Void) {
+    public init(credentialsHandler: @escaping (_ handler: @escaping @Sendable (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) -> Void) {
         
         self.init(credentialsHandler: credentialsHandler, didFinishAuthenticatingHandler: nil, didFailAuthenticatingHandler: nil)
     }
     
-    public init(credentialsHandler: @escaping (_ handler: @escaping (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) -> Void, didFinishAuthenticatingHandler: (() -> Void)?, didFailAuthenticatingHandler: ((Error) -> Void)?) {
+    public init(credentialsHandler: @escaping (_ handler: @escaping @Sendable (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) -> Void, didFinishAuthenticatingHandler: (() -> Void)?, didFailAuthenticatingHandler: ((Error) -> Void)?) {
         
         self.credentialsHandler = credentialsHandler
         self.didFinishAuthenticatingHandler = didFinishAuthenticatingHandler
@@ -52,7 +52,7 @@ public struct AnyCredentialsProvider: CredentialsProvider {
     
     //MARK: - CredentialsProvider
     
-    public func credentials(handler: @escaping @MainActor (CredentialsProvider.Username, CredentialsProvider.Password) -> Void) {
+    public func credentials(handler: @escaping @Sendable(CredentialsProvider.Username, CredentialsProvider.Password) -> Void) {
         
         self.credentialsHandler(handler)
     }

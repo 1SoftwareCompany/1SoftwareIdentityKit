@@ -9,7 +9,7 @@
 import Foundation
 
 //https://tools.ietf.org/html/rfc6749#section-4.2
-open class ImplicitGrantFlow: AuthorizationGrantFlow {
+open class ImplicitGrantFlow: AuthorizationGrantFlow, @unchecked Sendable {
     
     public let authorizationEndpoint: URL
     public let clientID: String
@@ -83,7 +83,7 @@ open class ImplicitGrantFlow: AuthorizationGrantFlow {
         return request
     }
     
-    open func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping (URLRequest) throws -> Bool) {
+    open func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) {
         
         self.userAgent.perform(request, redirectURI: redirectURI, redirectionHandler: redirectionHandler)
     }
@@ -145,7 +145,7 @@ open class ImplicitGrantFlow: AuthorizationGrantFlow {
     
     //MARK: - AuthorizationGrantFlow
     
-    public func authenticate(handler: @escaping @Sendable @MainActor(AccessTokenResponse?, Error?) -> Void) {
+    public func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         let authorizationRequest = AuthorizationRequest(clientID: self.clientID, redirectURI: self.redirectURI, scope: self.scope, state: self.state)
         let authorizationURLRequest = self.urlRequest(from: authorizationRequest)

@@ -13,15 +13,18 @@ import Foundation
 #endif
 
 ///A default implementation of a NetworkClient, used internally
-class DefaultNetoworkClient: NetworkClient {
+class DefaultNetoworkClient: NetworkClient, @unchecked Sendable {
     
     private let session = URLSession(configuration: .ephemeral)
     
-    func perform(_ request: URLRequest, completion: @escaping @Sendable @MainActor (NetworkResponse) -> Void) {
+    func perform(_ request: URLRequest, completion: @escaping @Sendable (NetworkResponse) -> Void) {
         
         #if os(iOS)
+        
+        var id = UIBackgroundTaskIdentifier.invalid
+        
+        Task { @MainActor in
             let application = UIApplication.shared
-            var id = UIBackgroundTaskIdentifier.invalid
             id = application.beginBackgroundTask(withName: "OneSoftwareIdentityKit.DefaultNetoworkClient.\(#function).backgroundTask") {
                 
                 let description = NSLocalizedString("Unable to complete network request", comment: "The description of the network error produced when the background time has expired")
@@ -32,6 +35,7 @@ class DefaultNetoworkClient: NetworkClient {
                 application.endBackgroundTask(id)
                 id = UIBackgroundTaskIdentifier.invalid
             }
+        }
         #endif
         
         let task = self.session.dataTask(with: request) { (data, response, error) in
@@ -40,7 +44,7 @@ class DefaultNetoworkClient: NetworkClient {
             }
             #if os(iOS)
             DispatchQueue.main.sync {
-                application.endBackgroundTask(id)
+                UIApplication.shared.endBackgroundTask(id)
                 id = UIBackgroundTaskIdentifier.invalid
             }
             #endif
@@ -56,5 +60,4 @@ class DefaultNetoworkClient: NetworkClient {
 }
 
 ///The shared instance of the default network client, used internally
-@MainActor
 public let _defaultNetworkClient: NetworkClient = DefaultNetoworkClient()

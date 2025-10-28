@@ -9,7 +9,7 @@
 import Foundation
 
 ///A default, closures based, implementation of NetworkResponseValidator
-public struct AnyNetworkResponseValidator: NetworkResponseValidator {
+public struct AnyNetworkResponseValidator: NetworkResponseValidator, @unchecked Sendable {
     
     public let handler: (NetworkResponse) -> Bool
     

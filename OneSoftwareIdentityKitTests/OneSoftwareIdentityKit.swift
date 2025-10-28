@@ -11,7 +11,7 @@ import XCTest
 
 extension String: @retroactive Error {}
 
-class TestNetworkClient: NetworkClient {
+class TestNetworkClient: NetworkClient, @unchecked Sendable {
     
     let handler: (URLRequest, (NetworkResponse) -> Void) -> Void
     
@@ -28,13 +28,13 @@ class TestNetworkClient: NetworkClient {
            }
     }
     
-    func perform(_ request: URLRequest, completion: @escaping @Sendable @MainActor (NetworkResponse) -> Void) {
+    func perform(_ request: URLRequest, completion: @escaping @Sendable (NetworkResponse) -> Void) {
         
         self.handler(request, completion)
     }
 }
 
-class TestUserAgent: UserAgent {
+class TestUserAgent: UserAgent, @unchecked Sendable {
     
     let handler: (URLRequest, URL?, @escaping (URLRequest) throws -> Bool) -> Void
     

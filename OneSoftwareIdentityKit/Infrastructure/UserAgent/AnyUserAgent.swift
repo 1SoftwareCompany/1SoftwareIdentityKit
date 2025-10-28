@@ -9,11 +9,11 @@
 import Foundation
 
 ///A default, closures based, implementation of UserAgent
-public struct AnyUserAgent: UserAgent {
+public struct AnyUserAgent: UserAgent, @unchecked Sendable {
     
-    public let handler: (_ request: URLRequest, _ redirectURI: URL?, _ redirectionHandler: @escaping (URLRequest) throws -> Bool) -> Void
+    public let handler: (_ request: URLRequest, _ redirectURI: URL?, _ redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) -> Void
     
-    public init(handler: @escaping (_ request: URLRequest, _ redirectURI: URL?, _ redirectionHandler: @escaping (URLRequest) throws -> Bool) -> Void) {
+    public init(handler: @escaping (_ request: URLRequest, _ redirectURI: URL?, _ redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) -> Void) {
         
         self.handler = handler
     }
@@ -23,7 +23,7 @@ public struct AnyUserAgent: UserAgent {
         self.handler = userAgent.perform(_:redirectURI:redirectionHandler:)
     }
     
-    public func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping (URLRequest) throws -> Bool) {
+    public func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) {
     
         self.handler(request, redirectURI, redirectionHandler)
     }

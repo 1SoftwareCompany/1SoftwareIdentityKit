@@ -201,13 +201,14 @@ class AuthorizationCodeGrantFlowInputViewController: UITableViewController, UITe
         var flow: AuthorizationGrantFlow? = AuthorizationCodeGrantFlow(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL, clientID: client, secret: secret, redirectURI: redirectURL, scope: scope, userAgent: userAgent, networkClient: networkClient)
 
         flow?.authenticate { [weak self] (accessTokenResponse, error) in
-
-            self?.accessTokenResponse = accessTokenResponse
-            self?.accessTokenError = error
-            
-            self?.showResult()
-            
-            flow = nil
+            Task { @MainActor in
+                self?.accessTokenResponse = accessTokenResponse
+                self?.accessTokenError = error
+                
+                self?.showResult()
+                
+                flow = nil
+            }
         }
     }
     

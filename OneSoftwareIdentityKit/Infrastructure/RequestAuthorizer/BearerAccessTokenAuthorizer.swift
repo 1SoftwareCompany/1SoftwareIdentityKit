@@ -22,7 +22,7 @@ public struct BearerAccessTokenAuthorizer: RequestAuthorizer {
         self.method = method
     }
     
-    public func authorize(request: URLRequest, handler: @escaping (URLRequest, Error?) -> Void) {
+    public func authorize(request: URLRequest, handler: @escaping @Sendable (URLRequest, Error?) -> Void) {
         
         var request = request
         var error: Error? = nil
@@ -102,7 +102,7 @@ public struct BearerAccessTokenAuthorizer: RequestAuthorizer {
 
 extension BearerAccessTokenAuthorizer {
     
-    public enum AuthorizationMethod {
+    public enum AuthorizationMethod: Sendable {
         
         //https://tools.ietf.org/html/rfc6750#section-2.1
         case header

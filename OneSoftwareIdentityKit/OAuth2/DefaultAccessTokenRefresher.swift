@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class DefaultAccessTokenRefresher: AccessTokenRefresher {
+open class DefaultAccessTokenRefresher: AccessTokenRefresher, @unchecked Sendable {
     
     public let tokenEndpoint: URL
     public let networkClient: NetworkClient
@@ -21,7 +21,7 @@ open class DefaultAccessTokenRefresher: AccessTokenRefresher {
         self.clientAuthorizer = clientAuthorizer
     }
     
-    open func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping  @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+    open func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping  @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         var request = URLRequest(url: self.tokenEndpoint)
         request.httpMethod = "POST"

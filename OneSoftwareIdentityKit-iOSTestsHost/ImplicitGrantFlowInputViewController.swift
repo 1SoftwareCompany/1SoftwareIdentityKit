@@ -152,13 +152,14 @@ class ImplicitGrantFlowInputViewController: UITableViewController, UITextFieldDe
         var flow: AuthorizationGrantFlow? = ImplicitGrantFlow(authorizationEndpoint: authorizationURL, clientID: client, redirectURI: redirectURL, scope: scope, userAgent: userAgent)
         
         flow?.authenticate { [weak self] (accessTokenResponse, error) in
-            
-            self?.accessTokenResponse = accessTokenResponse
-            self?.accessTokenError = error
-            
-            self?.showResult()
-            
-            flow = nil
+            Task { @MainActor in
+                self?.accessTokenResponse = accessTokenResponse
+                self?.accessTokenError = error
+                
+                self?.showResult()
+                
+                flow = nil
+            }
         }
     }
     
