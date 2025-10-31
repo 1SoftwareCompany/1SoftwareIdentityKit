@@ -9,8 +9,7 @@
 import Foundation
 
 ///A type that authorize instances of URLRequest
-@MainActor
-public protocol RequestAuthorizer {
+public protocol RequestAuthorizer: Sendable {
     
     /**
      Authorizes an instance of URLRequest.
@@ -20,7 +19,7 @@ public protocol RequestAuthorizer {
      - parameter request: The request to authorize.
      - parameter handler: The callback, executed when the authorization is complete. The callback takes 2 arguments - an URLRequest and an Error
      */
-    func authorize(request: URLRequest, handler: @escaping (URLRequest, Error?) -> Void)
+    func authorize(request: URLRequest, handler: @escaping @Sendable (URLRequest, Error?) -> Void)
 }
 
 extension RequestAuthorizer {
@@ -65,8 +64,7 @@ extension URLRequest {
      - parameter handler: The callback, executed when the authorization is complete. The callback takes 2 arguments - an URLRequest and an Error
      
      */
-    @MainActor
-    public func authorize(using authorizer: RequestAuthorizer, handler: @escaping (URLRequest, Error?) -> Void) {
+    public func authorize(using authorizer: RequestAuthorizer, handler: @escaping @Sendable (URLRequest, Error?) -> Void) {
             authorizer.authorize(request: self, handler: handler)
     }
     
@@ -83,7 +81,6 @@ extension URLRequest {
      
      */
     @available(iOS 13, tvOS 13, macOS 10.15, watchOS 6, *)
-    @MainActor
     public func authorized(using authorizer: RequestAuthorizer) async throws -> URLRequest {
         
         return try await authorizer.authorize(request: self)

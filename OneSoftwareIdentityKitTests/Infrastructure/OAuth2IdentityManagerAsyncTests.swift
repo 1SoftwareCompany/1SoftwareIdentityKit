@@ -12,12 +12,11 @@ import XCTest
 @testable import OneSoftwareIdentityKit
 
 @available(iOS 13, tvOS 13.0.0, macOS 10.15, *)
-@MainActor
-class OAuth2IdentityManagerAsyncTests: XCTestCase {
+class OAuth2IdentityManagerAsyncTests: XCTestCase, @unchecked Sendable {
     
     func testOAuth2IdentityManager() async throws {
         
-        class Flow: AuthorizationGrantFlow {
+        class Flow: AuthorizationGrantFlow, @unchecked Sendable {
             
             let e: XCTestExpectation
             private var callCount = 0
@@ -27,7 +26,7 @@ class OAuth2IdentityManagerAsyncTests: XCTestCase {
                 self.e = e
             }
             
-            func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+            func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
                 
                 e.fulfill()
                 callCount += 1
@@ -49,7 +48,7 @@ class OAuth2IdentityManagerAsyncTests: XCTestCase {
             }
         }
         
-        class Refresher: AccessTokenRefresher {
+        class Refresher: AccessTokenRefresher, @unchecked Sendable {
             
             let e: XCTestExpectation
             private var callCount = 0
@@ -59,7 +58,7 @@ class OAuth2IdentityManagerAsyncTests: XCTestCase {
                 self.e = e
             }
             
-            func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping @MainActor (AccessTokenResponse?, Error?) -> Void) {
+            func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
                 
                 e.fulfill()
                 callCount += 1
@@ -101,7 +100,7 @@ class OAuth2IdentityManagerAsyncTests: XCTestCase {
             
             let e: XCTestExpectation
             
-            func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+            func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
                 
                 e.fulfill()
                 handler(nil, nil)
@@ -121,7 +120,7 @@ class OAuth2IdentityManagerAsyncTests: XCTestCase {
                 return NetworkResponse(data: nil, response: HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: nil, headerFields: nil), error: nil)
             }
             
-            func perform(_ request: URLRequest, completion: @escaping @Sendable @MainActor (NetworkResponse) -> Void) {
+            func perform(_ request: URLRequest, completion: @escaping @Sendable (NetworkResponse) -> Void) {
                 
                 e.fulfill()
                 completion(NetworkResponse(data: nil, response: HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: nil, headerFields: nil), error: nil))
@@ -161,17 +160,17 @@ class OAuth2IdentityManagerAsyncTests: XCTestCase {
         
         //When trying to perform a refresh and the server returns an oauth2 error - the refresh token should be deleted
         
-        class Flow: AuthorizationGrantFlow {
+        class Flow: AuthorizationGrantFlow, @unchecked Sendable {
             
-            func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+            func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
                 
                 handler(AccessTokenResponse(accessToken: "tat1", tokenType: "Bearer", expiresIn: 0, refreshToken: "trt1", scope: nil), nil)
             }
         }
         
-        class Refresher: AccessTokenRefresher {
+        class Refresher: AccessTokenRefresher, @unchecked Sendable {
             
-            func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping @MainActor (AccessTokenResponse?, Error?) -> Void) {
+            func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
                 
                 handler(nil, NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: nil))
             }

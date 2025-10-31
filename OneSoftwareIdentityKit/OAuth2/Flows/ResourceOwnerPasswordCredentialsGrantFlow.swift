@@ -10,7 +10,7 @@ import Foundation
 
 //https://tools.ietf.org/html/rfc6749#section-1.3.3
 //https://tools.ietf.org/html/rfc6749#section-4.3
-open class ResourceOwnerPasswordCredentialsGrantFlow: AuthorizationGrantFlow {
+open class ResourceOwnerPasswordCredentialsGrantFlow: AuthorizationGrantFlow, @unchecked Sendable {
     
     public let tokenEndpoint: URL
     public let credentialsProvider: CredentialsProvider
@@ -64,7 +64,7 @@ open class ResourceOwnerPasswordCredentialsGrantFlow: AuthorizationGrantFlow {
         return request
     }
     
-    open func authorize(_ request: URLRequest, handler: @escaping (URLRequest, Error?) -> Void) {
+    open func authorize(_ request: URLRequest, handler: @escaping @Sendable (URLRequest, Error?) -> Void) {
         
         self.clientAuthorizer.authorize(request: request, handler: handler)
     }
@@ -83,8 +83,7 @@ open class ResourceOwnerPasswordCredentialsGrantFlow: AuthorizationGrantFlow {
         
         //nothing to validate here
     }
-    @MainActor
-    open func authenticate(using request: URLRequest, handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+    open func authenticate(using request: URLRequest, handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         self.authorize(request, handler: { (request, error) in
             
@@ -119,8 +118,7 @@ open class ResourceOwnerPasswordCredentialsGrantFlow: AuthorizationGrantFlow {
     }
     
     //MARK: - AuthorizationGrantFlow
-    @MainActor
-    open func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+    open func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         self.credentialsProvider.credentials { (username, password) in
             
@@ -137,8 +135,9 @@ open class ResourceOwnerPasswordCredentialsGrantFlow: AuthorizationGrantFlow {
                         
                         self.credentialsProvider.didFinishAuthenticating()
                     }
-                    
+                Task { @MainActor in
                     handler(response, error)
+                }
             })
         }
     }

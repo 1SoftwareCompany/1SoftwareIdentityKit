@@ -9,10 +9,9 @@
 import Foundation
 
 ///A type that refresh an access token using a refresh token
-@MainActor
-public protocol AccessTokenRefresher {
+public protocol AccessTokenRefresher: Sendable {
     
-    func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void)
+    func refresh(using requestModel: AccessTokenRefreshRequest, handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void)
 }
 
 extension AccessTokenRefresher {

@@ -10,7 +10,7 @@ import Foundation
 
 
 ///A type that makes a given user agent persentable.
-public struct PresentableUserAgent<T: UserAgent>: UserAgent {
+public struct PresentableUserAgent<T: UserAgent>: UserAgent, @unchecked Sendable {
     
     public var userAgent: T
     public var presentationHandler: (T) -> Void
@@ -33,7 +33,7 @@ public struct PresentableUserAgent<T: UserAgent>: UserAgent {
         self.dismissHandler = dismissHandler
     }
     
-    public func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping (URLRequest) throws -> Bool) {
+    public func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) {
         
         DispatchQueue.main.async {
             

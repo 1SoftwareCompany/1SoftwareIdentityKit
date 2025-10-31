@@ -9,8 +9,7 @@
 import Foundation
 
 ///A type that validates network response
-@MainActor
-public protocol NetworkResponseValidator {
+public protocol NetworkResponseValidator: Sendable {
     
     ///Validates a network response and returns true if valid and false if invalid
     func validate(_ response: NetworkResponse) -> Bool

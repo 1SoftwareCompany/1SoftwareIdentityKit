@@ -9,14 +9,13 @@
 import Foundation
 
 ///A type that provides credentials
-@MainActor
-public protocol CredentialsProvider {
+public protocol CredentialsProvider: Sendable {
     
     typealias Username = String
     typealias Password = String
     
     ///Provides credentials in an asynchronous manner. Can be implemented in a way to show a login screen.
-    func credentials(handler: @escaping @MainActor (Username, Password) -> Void)
+    func credentials(handler: @escaping @Sendable (Username, Password) -> Void)
     
     ///(Optional) Called to notify the receiver that authentication has been successful with the suplied credentials.
     func didFinishAuthenticating()

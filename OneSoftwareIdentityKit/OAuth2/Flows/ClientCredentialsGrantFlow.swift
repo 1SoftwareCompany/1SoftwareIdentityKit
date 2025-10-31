@@ -9,7 +9,7 @@
 import Foundation
 
 //https://tools.ietf.org/html/rfc6749#section-4.4
-open class ClientCredentialsGrantFlow: AuthorizationGrantFlow {
+open class ClientCredentialsGrantFlow: AuthorizationGrantFlow, @unchecked Sendable {
     
     public let tokenEndpoint: URL
     public let scope: Scope?
@@ -58,12 +58,12 @@ open class ClientCredentialsGrantFlow: AuthorizationGrantFlow {
         return request
     }
     
-    open func authorize(_ request: URLRequest, handler: @escaping (URLRequest, Error?) -> Void) {
+    open func authorize(_ request: URLRequest, handler: @escaping @Sendable (URLRequest, Error?) -> Void) {
         
         self.clientAuthorizer.authorize(request: request, handler: handler)
     }
     
-    open func perform(_ request: URLRequest, completion: @escaping @Sendable @MainActor (NetworkResponse) -> Void) {
+    open func perform(_ request: URLRequest, completion: @escaping @Sendable (NetworkResponse) -> Void) {
         
         self.networkClient.perform(request, completion: completion)
     }
@@ -83,7 +83,7 @@ open class ClientCredentialsGrantFlow: AuthorizationGrantFlow {
         }
     }
     
-    open func authenticate(using request: URLRequest, handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+    open func authenticate(using request: URLRequest, handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         self.authorize(request, handler: { (request, error) in
             
@@ -114,7 +114,7 @@ open class ClientCredentialsGrantFlow: AuthorizationGrantFlow {
     
     //MARK: - AuthorizationGrantFlow
     
-    open func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+    open func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         //build the request
         let accessTokenRequest = AccessTokenRequest(scope: self.scope)

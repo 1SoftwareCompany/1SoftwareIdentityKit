@@ -9,8 +9,7 @@
 import Foundation
 
 ///A type that represents a resource owner's user agent (typically a web browser) and is capable of receiving incoming requests (via redirection) from the authorization server.
-@MainActor
-public protocol UserAgent {
+public protocol UserAgent: Sendable {
     
     /**
      Performs a request within the user agent and execute a redirectionHandler when a redirection occurs for a given or default redirect URL.
@@ -27,5 +26,5 @@ public protocol UserAgent {
      
      */
     
-    func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping (URLRequest) throws -> Bool)
+    func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool)
 }

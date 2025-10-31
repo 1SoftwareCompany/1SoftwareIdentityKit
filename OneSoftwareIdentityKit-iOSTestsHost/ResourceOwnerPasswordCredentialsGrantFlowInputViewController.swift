@@ -202,13 +202,14 @@ class ResourceOwnerPasswordCredentialsGrantFlowInputViewController: UITableViewC
         var flow: AuthorizationGrantFlow? = ResourceOwnerPasswordCredentialsGrantFlow(tokenEndpoint: tokenURL, credentialsProvider: credentialsProvider, scope: scope, clientAuthorizer: clientAuthorizer, networkClient: networkClient)
         
         flow?.authenticate { [weak self] (accessTokenResponse, error) in
-            
-            self?.accessTokenResponse = accessTokenResponse
-            self?.accessTokenError = error
-            
-            self?.showResult()
-            
-            flow = nil
+            Task { @MainActor in
+                self?.accessTokenResponse = accessTokenResponse
+                self?.accessTokenError = error
+                
+                self?.showResult()
+                
+                flow = nil
+            }
         }
     }
     

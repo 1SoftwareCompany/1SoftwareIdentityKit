@@ -9,7 +9,7 @@
 import Foundation
 
 //https://tools.ietf.org/html/rfc6749#section-4.1
-open class AuthorizationCodeGrantFlow: AuthorizationGrantFlow {
+open class AuthorizationCodeGrantFlow: AuthorizationGrantFlow, @unchecked Sendable {
     
     public let authorizationEndpoint: URL
     public let tokenEndpoint: URL
@@ -136,7 +136,7 @@ open class AuthorizationCodeGrantFlow: AuthorizationGrantFlow {
         return request
     }
     
-    open func authorize(accesTokenURLRequest: URLRequest, handler: @escaping (URLRequest, Error?) -> Void) {
+    open func authorize(accesTokenURLRequest: URLRequest, handler: @Sendable @escaping (URLRequest, Error?) -> Void) {
         
         guard let clientAuthorizer = self.clientAuthorizer else {
             
@@ -147,7 +147,7 @@ open class AuthorizationCodeGrantFlow: AuthorizationGrantFlow {
         clientAuthorizer.authorize(request: accesTokenURLRequest, handler: handler)
     }
     
-    open func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping (URLRequest) throws -> Bool) {
+    open func perform(_ request: URLRequest, redirectURI: URL?, redirectionHandler: @escaping @Sendable (URLRequest) throws -> Bool) {
         
         self.userAgent.perform(request, redirectURI: redirectURI, redirectionHandler: redirectionHandler)
     }
@@ -223,7 +223,7 @@ open class AuthorizationCodeGrantFlow: AuthorizationGrantFlow {
     
     //MARK: - AuthorizationGrantFlow
     
-    open func authenticate(handler: @escaping @Sendable @MainActor (AccessTokenResponse?, Error?) -> Void) {
+    open func authenticate(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
 
         let authorizationRequest = AuthorizationRequest(clientID: self.clientID, redirectURI: self.redirectURI, scope: self.scope, state: self.state)
         let authorizationURLRequest = self.urlRequest(from: authorizationRequest)

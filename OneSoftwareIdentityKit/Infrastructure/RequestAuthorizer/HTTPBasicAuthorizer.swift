@@ -20,7 +20,7 @@ public struct HTTPBasicAuthorizer: RequestAuthorizer {
         self.password = password
     }
     
-    public func authorize(request: URLRequest, handler: @escaping (URLRequest, Error?) -> Void) {
+    public func authorize(request: URLRequest, handler: @escaping @Sendable (URLRequest, Error?) -> Void) {
         
         guard let credentials = (username + ":" + password).data(using: .utf8)?.base64EncodedString() else {
             

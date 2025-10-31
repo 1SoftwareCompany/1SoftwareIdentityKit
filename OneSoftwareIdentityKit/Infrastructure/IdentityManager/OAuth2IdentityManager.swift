@@ -10,7 +10,7 @@ import Foundation
 
 ///Perform an authorization using an OAuth2 AuthorizationGrantFlow for authentication with a behaviour that refresh a token if possible and preserves a state.
 ///The core logic is ilustrated here - https://tools.ietf.org/html/rfc6749#section-1.5
-open class OAuth2IdentityManager: IdentityManager {
+open class OAuth2IdentityManager: IdentityManager, @unchecked Sendable {
     
     //used for authentication - getting OAuth2 access token
     public let flow: AuthorizationGrantFlow
@@ -99,15 +99,13 @@ open class OAuth2IdentityManager: IdentityManager {
     
     //MARK: - IdentityManager
     
-    private func performAuthentication(handler: @escaping (AccessTokenResponse?, Error?) -> Void) {
+    private func performAuthentication(handler: @escaping @Sendable (AccessTokenResponse?, Error?) -> Void) {
         
         self.postWillAuthenticateNotification()
         
-        self.flow.authenticate { (response, error) in
-            Task { @MainActor in
-                self.didFinishAuthenticating(with: response, error: error)
+        self.flow.authenticate { [weak self] (response, error) in
+                self?.didFinishAuthenticating(with: response, error: error)
                 handler(response, error)
-            }
         }
     }
     
@@ -179,14 +177,16 @@ open class OAuth2IdentityManager: IdentityManager {
         return try await self.performAuthentication()
     }
     
-    private func performAuthorization(request: URLRequest, forceAuthenticate: Bool, handler: @escaping @Sendable @MainActor (URLRequest, Error?) -> Void) async {
+    private func performAuthorization(request: URLRequest, forceAuthenticate: Bool, handler: @escaping @Sendable (URLRequest, Error?) -> Void) async {
         
         var handlerCalled = false
         
-        let safeHandler: @Sendable @MainActor (URLRequest, Error?) -> Void = { request, error in
-            guard !handlerCalled else { return }
-            handlerCalled = true
-            handler(request, error)
+        let safeHandler: @Sendable (URLRequest, Error?) -> Void = { request, error in
+            Task { @MainActor in
+                guard !handlerCalled else { return }
+                handlerCalled = true
+                handler(request, error)
+            }
         }
         
         // Use cached token if available and valid
@@ -213,7 +213,7 @@ open class OAuth2IdentityManager: IdentityManager {
     
     //MARK: - IdentityManager
     
-    open func authorize(request: URLRequest, forceAuthenticate: Bool, handler: @escaping  @Sendable @MainActor (URLRequest, Error?) -> Void) {
+    open func authorize(request: URLRequest, forceAuthenticate: Bool, handler: @escaping  @Sendable (URLRequest, Error?) -> Void) {
         
         queue.addOperation {
             let semaphore = DispatchSemaphore(value: 0)
@@ -232,10 +232,7 @@ open class OAuth2IdentityManager: IdentityManager {
     open func revokeAuthenticationState() {
         
         self.queue.addOperation {
-            Task { @MainActor in
                 self.accessTokenResponse = nil
-            }
-            
             //TODO: implement token revocation trough server
         }
     }
@@ -243,9 +240,7 @@ open class OAuth2IdentityManager: IdentityManager {
     open func revokeAuthorizationState() {
         
         self.queue.addOperation {
-            Task { @MainActor in
-                self.accessTokenResponse?.expiresIn = 0
-            }
+            self.accessTokenResponse?.expiresIn = 0
         }
     }
     
@@ -253,7 +248,7 @@ open class OAuth2IdentityManager: IdentityManager {
         
         struct PlaceholderIdentityManager: IdentityManager {
             
-            func authorize(request: URLRequest, forceAuthenticate: Bool, handler: @escaping @Sendable @MainActor (URLRequest, Error?) -> Void) {}
+            func authorize(request: URLRequest, forceAuthenticate: Bool, handler: @escaping @Sendable (URLRequest, Error?) -> Void) {}
             func revokeAuthenticationState() {}
             func revokeAuthorizationState() {}
             
