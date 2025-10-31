@@ -114,16 +114,14 @@ open class OAuth2IdentityManager: IdentityManager, @unchecked Sendable {
         
         return try await withCheckedThrowingContinuation { continuation in
             self.flow.authenticate { response, error in
-                Task { @MainActor in
-                    self.didFinishAuthenticating(with: response, error: error)
-                    
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else if let response = response {
-                        continuation.resume(returning: response)
-                    } else {
-                        continuation.resume(throwing: NSError(domain: "AuthenticationError", code: 0, userInfo: nil))
-                    }
+                self.didFinishAuthenticating(with: response, error: error)
+                
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else if let response = response {
+                    continuation.resume(returning: response)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "AuthenticationError", code: 0, userInfo: nil))
                 }
             }
         }
