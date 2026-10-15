@@ -175,36 +175,56 @@ open class OAuth2IdentityManager: IdentityManager, @unchecked Sendable {
         return try await self.performAuthentication()
     }
     
-    private func performAuthorization(request: URLRequest, forceAuthenticate: Bool, handler: @escaping @Sendable (URLRequest, Error?) -> Void) async {
-        
-        var handlerCalled = false
-        
-        let safeHandler: @Sendable (URLRequest, Error?) -> Void = { request, error in
-            Task { @MainActor in
-                guard !handlerCalled else { return }
-                handlerCalled = true
-                handler(request, error)
-            }
-        }
-        
-        // Use cached token if available and valid
-        if !forceAuthenticate, let response = self.accessTokenResponse, !response.isExpired {
-            
-            self.tokenAuthorizerProvider(response).authorize(request: request, handler: safeHandler)
+    private func performAuthorization(
+        request: URLRequest,
+        forceAuthenticate: Bool,
+        handler: @escaping @Sendable (URLRequest, Error?) -> Void
+    ) async {
+
+        if !forceAuthenticate,
+           let response = accessTokenResponse,
+           !response.isExpired {
+
+            tokenAuthorizerProvider(response).authorize(
+                request: request,
+                handler: handler
+            )
+
             return
         }
-        
+
         do {
-            let response = try await self.authenticate(forced: forceAuthenticate)
-            self.accessTokenResponse = response
-            self.tokenAuthorizerProvider(response).authorize(request: request, handler: safeHandler)
+            let response = try await authenticate(forced: forceAuthenticate)
+
+            accessTokenResponse = response
+
+            tokenAuthorizerProvider(response).authorize(
+                request: request,
+                handler: handler
+            )
+
         } catch {
-            
-            if self.retryAuthorizationOnAuthenticationError, error is ErrorResponse {
-                
-                await self.performAuthorization(request: request, forceAuthenticate: forceAuthenticate, handler: handler)
+
+            if retryAuthorizationOnAuthenticationError,
+               error is ErrorResponse {
+
+                do {
+                    // Retry authentication once, explicitly forced
+                    let response = try await authenticate(forced: true)
+
+                    accessTokenResponse = response
+
+                    tokenAuthorizerProvider(response).authorize(
+                        request: request,
+                        handler: handler
+                    )
+
+                } catch {
+                    handler(request, error)
+                }
+
             } else {
-                safeHandler(request, error)
+                handler(request, error)
             }
         }
     }

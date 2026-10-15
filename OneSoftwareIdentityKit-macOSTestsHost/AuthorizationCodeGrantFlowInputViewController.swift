@@ -23,6 +23,8 @@ class AuthorizationCodeGrantFlowInputViewController: NSViewController {
     private var accessTokenResponse: AccessTokenResponse?
     private var accessTokenError: Error?
     
+    private var flow: AuthorizationGrantFlow?
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -191,16 +193,20 @@ class AuthorizationCodeGrantFlowInputViewController: NSViewController {
             _defaultNetworkClient.perform(request, completion: completion)
         }
         
-        var flow: AuthorizationGrantFlow? = AuthorizationCodeGrantFlow(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL, clientID: client, secret: secret, redirectURI: redirectURL, scope: scope, userAgent: userAgent, networkClient: networkClient)
+        let authenticationFlow = AuthorizationCodeGrantFlow(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL, clientID: client, secret: secret, redirectURI: redirectURL, scope: scope, userAgent: userAgent, networkClient: networkClient)
         
-        flow?.authenticate { [weak self] (accessTokenResponse, error) in
-            
-            self?.accessTokenResponse = accessTokenResponse
-            self?.accessTokenError = error
-            
-            self?.showResult()
-            
-            flow = nil
+        self.flow = authenticationFlow
+        
+        authenticationFlow.authenticate { [weak self] response, error in
+            Task { @MainActor [weak self, response, error] in
+                guard let self else { return }
+
+                self.accessTokenResponse = response
+                self.accessTokenError = error
+
+                self.showResult()
+                self.flow = nil
+            }
         }
     }
     

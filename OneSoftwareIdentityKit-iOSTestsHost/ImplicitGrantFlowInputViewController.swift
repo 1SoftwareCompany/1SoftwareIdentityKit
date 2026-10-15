@@ -19,6 +19,8 @@ class ImplicitGrantFlowInputViewController: UITableViewController, UITextFieldDe
     private var accessTokenResponse: AccessTokenResponse?
     private var accessTokenError: Error?
     
+    private var flow: AuthorizationGrantFlow?
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -149,16 +151,19 @@ class ImplicitGrantFlowInputViewController: UITableViewController, UITextFieldDe
             self?.navigationController?.popViewController(animated: true)
         }
         
-        var flow: AuthorizationGrantFlow? = ImplicitGrantFlow(authorizationEndpoint: authorizationURL, clientID: client, redirectURI: redirectURL, scope: scope, userAgent: userAgent)
+        let authenticationFlow = ImplicitGrantFlow(authorizationEndpoint: authorizationURL, clientID: client, redirectURI: redirectURL, scope: scope, userAgent: userAgent)
         
-        flow?.authenticate { [weak self] (accessTokenResponse, error) in
-            Task { @MainActor in
-                self?.accessTokenResponse = accessTokenResponse
-                self?.accessTokenError = error
-                
-                self?.showResult()
-                
-                flow = nil
+        self.flow = authenticationFlow
+        
+        authenticationFlow.authenticate { [weak self] response, error in
+            Task { @MainActor [weak self, response, error] in
+                guard let self else { return }
+
+                self.accessTokenResponse = response
+                self.accessTokenError = error
+
+                self.showResult()
+                self.flow = nil
             }
         }
     }

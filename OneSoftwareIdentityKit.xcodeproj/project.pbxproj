@@ -25,6 +25,8 @@
 		1EEF02FF289D3DD00087B863 /* RequestAuthorizerAsyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF02FE289D3DD00087B863 /* RequestAuthorizerAsyncTests.swift */; };
 		1EEF0300289D3DD00087B863 /* RequestAuthorizerAsyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF02FE289D3DD00087B863 /* RequestAuthorizerAsyncTests.swift */; };
 		1EEF0301289D3DD00087B863 /* RequestAuthorizerAsyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF02FE289D3DD00087B863 /* RequestAuthorizerAsyncTests.swift */; };
+		90C0C72E3080F06B003DD77D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C0C72D3080F06B003DD77D /* SceneDelegate.swift */; };
+		90C0C7303080F104003DD77D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C0C72F3080F104003DD77D /* SceneDelegate.swift */; };
 		90D24A3D2D4A648D0014F9EA /* OneSoftwareIdentityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6985D9F2069018500BE5F6A /* OneSoftwareIdentityKit.framework */; };
 		9954AE4F1E9D169700F2A73D /* OneSoftwareIdentityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9954AE451E9D169700F2A73D /* OneSoftwareIdentityKit.framework */; };
 		9954AE541E9D169700F2A73D /* OneSoftwareIdentityKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9954AE531E9D169700F2A73D /* OneSoftwareIdentityKit.swift */; };
@@ -327,6 +329,8 @@
 		434E10062685CF1C00257D8A /* OneSoftwareIdentityKit-iOSTestsHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OneSoftwareIdentityKit-iOSTestsHost.entitlements"; sourceTree = "<group>"; };
 		434E10082685FD5F00257D8A /* OneSoftwareIdentityKit-tvOSTestsHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OneSoftwareIdentityKit-tvOSTestsHost.entitlements"; sourceTree = "<group>"; };
 		4828A6132D2E9E4400A9C8E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		90C0C72D3080F06B003DD77D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		90C0C72F3080F104003DD77D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		9954AE451E9D169700F2A73D /* OneSoftwareIdentityKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OneSoftwareIdentityKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9954AE481E9D169700F2A73D /* OneSoftwareIdentityKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OneSoftwareIdentityKit.h; sourceTree = "<group>"; };
 		9954AE491E9D169700F2A73D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -626,6 +630,7 @@
 			isa = PBXGroup;
 			children = (
 				434E10062685CF1C00257D8A /* OneSoftwareIdentityKit-iOSTestsHost.entitlements */,
+				90C0C72D3080F06B003DD77D /* SceneDelegate.swift */,
 				E68221AE1F7703B700193B48 /* AppDelegate.swift */,
 				E68221B01F7703B700193B48 /* AuthorizationCodeGrantFlowInputViewController.swift */,
 				E6B1957122CA24F600954DED /* ImplicitGrantFlowInputViewController.swift */,
@@ -643,6 +648,7 @@
 			isa = PBXGroup;
 			children = (
 				434E10082685FD5F00257D8A /* OneSoftwareIdentityKit-tvOSTestsHost.entitlements */,
+				90C0C72F3080F104003DD77D /* SceneDelegate.swift */,
 				E6985E2820690CB400BE5F6A /* AppDelegate.swift */,
 				E6985E2A20690CB400BE5F6A /* ViewController.swift */,
 				E6985E2C20690CB400BE5F6A /* Main.storyboard */,
@@ -1249,6 +1255,7 @@
 				E6E83B72212033DF0062CB99 /* ClientCredentialsGrantFlowInputViewController.swift in Sources */,
 				E6E83B70212033C40062CB99 /* ResourceOwnerPasswordCredentialsGrantFlowInputViewController.swift in Sources */,
 				E6B1957222CA24F600954DED /* ImplicitGrantFlowInputViewController.swift in Sources */,
+				90C0C72E3080F06B003DD77D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1448,6 +1455,7 @@
 			files = (
 				E6985E2B20690CB400BE5F6A /* ViewController.swift in Sources */,
 				E6985E2920690CB400BE5F6A /* AppDelegate.swift in Sources */,
+				90C0C7303080F104003DD77D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1704,7 +1712,7 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1731,7 +1739,7 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1753,7 +1761,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				INFOPLIST_FILE = OneSoftwareIdentityKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1773,7 +1781,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				INFOPLIST_FILE = OneSoftwareIdentityKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1799,7 +1807,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OneSoftwareIdentityKit-iOSTestsHost/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1825,7 +1833,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OneSoftwareIdentityKit-iOSTestsHost/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1855,6 +1863,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1888,6 +1897,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1921,6 +1931,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1954,6 +1965,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1982,6 +1994,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2008,6 +2021,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2042,6 +2056,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2076,6 +2091,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2104,6 +2120,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2130,6 +2147,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSoftwareIdentityKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2156,6 +2174,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OneSoftwareIdentityKit-tvOSTestsHost/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2183,6 +2202,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OneSoftwareIdentityKit-tvOSTestsHost/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2212,6 +2232,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OneSoftwareIdentityKit-macOSTestsHost/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2239,6 +2260,7 @@
 				DEVELOPMENT_TEAM = 4RC8K35TSD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OneSoftwareIdentityKit-macOSTestsHost/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
