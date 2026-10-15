@@ -21,6 +21,8 @@ class ClientCredentialsGrantFlowInputViewController: NSViewController {
     private var accessTokenResponse: AccessTokenResponse?
     private var accessTokenError: Error?
     
+    private var flow: AuthorizationGrantFlow?
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -166,16 +168,18 @@ class ClientCredentialsGrantFlowInputViewController: NSViewController {
         
         let clientAuthorizer = HTTPBasicAuthorizer(clientID: client, secret: secret)
         
-        var flow: AuthorizationGrantFlow? = ClientCredentialsGrantFlow(tokenEndpoint: tokenURL, scope: scope, clientAuthorizer: clientAuthorizer, networkClient: networkClient)
+        let authenticationFlow = ClientCredentialsGrantFlow(tokenEndpoint: tokenURL, scope: scope, clientAuthorizer: clientAuthorizer, networkClient: networkClient)
         
-        flow?.authenticate { [weak self] (accessTokenResponse, error) in
-            
-            self?.accessTokenResponse = accessTokenResponse
-            self?.accessTokenError = error
-            
-            self?.showResult()
-            
-            flow = nil
+        authenticationFlow.authenticate { [weak self] response, error in
+            Task { @MainActor [weak self, response, error] in
+                guard let self else { return }
+
+                self.accessTokenResponse = response
+                self.accessTokenError = error
+
+                self.showResult()
+                self.flow = nil
+            }
         }
     }
     

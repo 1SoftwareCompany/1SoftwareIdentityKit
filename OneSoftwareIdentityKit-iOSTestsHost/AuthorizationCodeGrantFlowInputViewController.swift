@@ -21,6 +21,8 @@ class AuthorizationCodeGrantFlowInputViewController: UITableViewController, UITe
     private var accessTokenRequest: URLRequest?
     private var accessTokenResponse: AccessTokenResponse?
     private var accessTokenError: Error?
+    
+    private var flow: AuthorizationGrantFlow?
 
     override func viewDidLoad() {
         
@@ -198,18 +200,22 @@ class AuthorizationCodeGrantFlowInputViewController: UITableViewController, UITe
             _defaultNetworkClient.perform(request, completion: completion)
         }
         
-        var flow: AuthorizationGrantFlow? = AuthorizationCodeGrantFlow(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL, clientID: client, secret: secret, redirectURI: redirectURL, scope: scope, userAgent: userAgent, networkClient: networkClient)
+        let authenticationFlow = AuthorizationCodeGrantFlow(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL, clientID: client, secret: secret, redirectURI: redirectURL, scope: scope, userAgent: userAgent, networkClient: networkClient)
+        
+        self.flow = authenticationFlow
+        
+        authenticationFlow.authenticate { [weak self] response, error in
+            Task { @MainActor [weak self, response, error] in
+                guard let self else { return }
 
-        flow?.authenticate { [weak self] (accessTokenResponse, error) in
-            Task { @MainActor in
-                self?.accessTokenResponse = accessTokenResponse
-                self?.accessTokenError = error
-                
-                self?.showResult()
-                
-                flow = nil
+                self.accessTokenResponse = response
+                self.accessTokenError = error
+
+                self.showResult()
+                self.flow = nil
             }
         }
+
     }
     
     //MARK: - UITableViewDataSource & UITableViewDelegate
